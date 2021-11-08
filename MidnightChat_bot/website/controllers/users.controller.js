@@ -3,6 +3,7 @@ const User = db.users;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { use } = require("../routes/users.routes");
 
 //Create a new user
 exports.create = (req, res) => {
@@ -58,25 +59,58 @@ exports.findAll = (req, res) => {
       });
 };
 
-// Find a single user with  id
+// Find a single user with  verif_code
 exports.findOne = (req, res) => {
-
-  const id = req.params.id;
-
-  User.findByPk(id)
+    const verif_code = req.params.verif_code;
+    const tg_id = req.params.tg_id;
+    const userDetails = {
+        tg_id: req.body.tg_id,
+        tg_userName: req.body.tg_userName,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        verif_code: req.body.verif_code,
+        balance: req.body.balance,
+    }
+  
+    return User.findOne(req.body, {
+        where: {userDetails}
+    })
       .then(data => {
-          res.send(data);
+        if (data) {
+          res.send(data)
+        } else {
+            res.send("nope")/* callback(null, false); */
+        }
       })
       .catch(err => {
-          res.status(500).send({
-              message: "Error retrieving the company with id=" + id
-          });
+        res.send("err");
+      })
+  };
+
+
+
+// Find a single user with  verif_code
+/* exports.test1 = (req, res) => {
+    const promise = (User.findOne({where: req.params.verif_code}));
+  
+    promise.then(data => {
+        if (data) {
+          res.send(true);
+        } else {
+          res.send(false);
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error retrieving user with id=" + verif_code
+        });
       });
-};
+  }; */
+
 
 //Update a specific  user with id
 exports.update = (req, res) => {
-  const id = req.params.id;
   const userDetails = {
       tg_id: req.body.tg_id,
       tg_userName: req.body.tg_userName,
@@ -88,7 +122,7 @@ exports.update = (req, res) => {
   }
   User.update(req.body, {
           userDetails,
-          where: { id: id }
+          where: { verif_code: verif_code }
       })
       .then(num => {
           if (num == 1) {
@@ -97,13 +131,13 @@ exports.update = (req, res) => {
               });
           } else {
               res.send({
-                  message: `Cannot update this user with id=${id} 's informations. Maybe they were not found or req.body is empty!`
+                  message: `Cannot update this user with verif_code=${verif_code} 's informations. Maybe they were not found or req.body is empty!`
               });
           }
       })
       .catch(err => {
           res.status(500).send({
-              message: "Error updating this user  with id=" + id
+              message: "Error updating this user  with verif_code=" + verif_code
           });
       });
 };

@@ -16,45 +16,255 @@
 
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/start/jquery-ui.css" type="text/css" media="all" />
 
+
 </head>
 
 <body>
-    <section class="sectionBtn">
-        
-        <div class="containerBtn">
-            <div class = "row no-gutters">
-                <div class="dropdown offset-1-right">
-                    <button class="btn btn-light btn_BiggerCircle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                          </svg>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="/profile">Profile Settings</a>
-                      <a class="dropdown-item" href="#">Sign out</a>
-                      <!-- <a class="dropdown-item" href="#">Something else here</a> -->
-                    </div>
-                </div>
-                <div class ="offset-1-right">
-                    <a href="/signin" type="button" class=" a_btnBigger btn-light">Sign in</a>
-                </div>
+    <!-- Header container -->
+    <section class="ourSection"> 
+        <div class="container">
+            <div class = "row no-gutters align-self-center">
                 <!-- tg://resolve?domain=MidnightChat_bot&start= -->
-                <div class ="offset-0-right" onclick="onhover()">
-                    <a href="#" type="button" class="a_btnBigger btn-light">Join Chat</a>
+                <div class= "col-2">
+                    <img src="../images/midnightLogo.svg" width="187px" height="38px"/>
                 </div>
-                <div class ="offset-0-right">
-                    <a href="/admin" type="button" class=" a_btnBigger btn-light">Admin panel</a>
+                <div class= "col-8 row no-gutters align-items-center">
+                    <a href="" class ="headerLinks offset-headerLinks marginNearLogo">
+                        About
+                    </a>
+                    <a href="" class ="headerLinks offset-headerLinks">
+                        Advantages
+                    </a>
+                    <a href="" class ="headerLinks offset-headerLinks" >
+                        How it works
+                    </a>
+                    <a href="" class ="headerLinks offset-headerLinks">
+                        Reviews
+                    </a>
+                    <a href="" class ="headerLinks">
+                        FAQ
+                    </a>
                 </div>
-                <div class ="offset-0-right">
-                    <a href="/hirer" type="button" class=" a_btnBigger btn-light">Hirer panel</a>
-                </div>
-                    <div class="row d-flex justify-content-center align-items-center no-gutters ml-auto">
-                            <div class="search"> <i class="fa fa-search"></i> <input type="text" id="search_input"class="form-control" placeholder="Job title"> </div>
+                <div class= "col-2">
+                    <div class ="btn startBtn right" onclick="onhover()">
+                        Start
                     </div>
+                </div>
+
             </div>
         </div>
     </section>
+    <hr class="headerLine">
+    
+    <!-- Welcome container -->
+    <section class="ourSection"> 
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-6 mt-5">
+                    <p class="mainText mb-0 pb-0">
+                        Meet and look at beautiful girls with 
+                    </p>
+                    <p class="wordMidnight mb-4">
+                        Midnight
+                    </p>
+                    <p class="smallerMainText">
+                        Sed ut perspiciatis, unde omnis iste natus 
+                        error sit voluptatem accusantium doloremque 
+                        laudantium, totam rem aperiam eaque ipsa, quae 
+                        ab illo inventore veritatis et quasi architecto 
+                        beatae vitae dicta
+                    </p>
+                    <button class="btn mainBtn mt-5 mb-4">Get Started</button>
+                    <div class="row no-gutters">
+                        <div class="smallYellowCircle offset-1-right mt-1">
+                        </div>
+                        <p class="textNearYellow">
+                            get started and get a bonus as a gift
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <!-- Slider -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistic container -->
+    <section class="ourSection mb-7"> 
+        <div class="container">
+            <div class="row no-gutters bg_statisticBlock mt-3 paddingInTheMiddle">
+                <div class="col-4 row no-gutters align-items-center justify-content-center">
+                    <div class="col-5">
+                        <div class="circleInStatic offset-1-right right align-items-center justify-content-center">
+                            <img src="../images/bi_person-bounding-box.svg" width="27px" height="27px"/>
+                        </div>
+                    </div>
+                    <div class="col-7 row no-gutters align-items-center justify-content-center">
+                        <div class="col-11 mt-3">
+                            <p class="textInStatic offset-1-right mb-1">
+                                100+
+                            </p>
+                            <p class="smallTextInStatic offset-1-right">
+                                creators
+                            </p>
+                        </div>
+                        <div class="col-1">
+                            <img class="right" src="../images/vl.svg"/>
+                            <!-- <div class="vl right"></div> -->
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-4 row no-gutters align-items-center justify-content-center">
+                    <div class="col-5">
+                        <div class="circleInStatic offset-1-right right align-items-center justify-content-center">
+                            <img src="../images/play.svg" width="27px" height="27px"/>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="col-11 mt-3">
+                            <p class="textInStatic offset-1-right mb-1">
+                                100+
+                            </p>
+                            <p class="smallTextInStatic offset-1-right">
+                                past streams
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 row no-gutters align-items-center justify-content-center">
+                    <div class="col-5 row no-gutters align-items-center justify-content-center">
+                        <div class="col-1">
+                            <img src="../images/vl.svg"/>
+                            <!-- <svg xmlns="../images/Vector 16.svg" width="10" height="155"> </svg> -->
+
+                            <!-- <div class="vl"></div> -->
+                        </div>
+                        <div class="col-11">
+                            <div class="circleInStatic offset-1-right right align-items-center justify-content-center">
+                                <img src="../images/landscape.svg" width="27px" height="27px"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7 mt-3"> 
+                    <p class="textInStatic mb-1">
+                        100+
+                    </p>
+                    <p class="smallTextInStatic offset-1-right">
+                        unique posts
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="advantagesSection">
+        <!-- Advantages container -->
+        <div class="container">
+            <div class="row no-gutters align-items-center justify-content-center">
+                    <p class="advantagesTitle mb-3 mt-4">
+                        Advantages
+                    </p>
+            </div>
+            <div class="row no-gutters align-items-center justify-content-center">
+                <p class="advantagesSmallerText mb-5">
+                    Let's choose the package that is best for you and explore it happily and cheerfully
+                </p>
+            </div>
+
+            <div class="row no-gutters mt-3">
+                <div class="col-3_5 row no-gutters">
+                    <div class="topBlock paddingBlock">
+                        <div class="topLeftIcon align-items-center justify-content-center">
+                            <img src="../images/landscapeWhite.svg" width="34px" height="34px"/>
+                        </div>
+                        <p class="titleBlock mt-3 mb-2">
+                            Unique content
+                        </p>
+                        <p class="underTitleBlock">
+                            Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque
+                        </p>
+                    </div>
+                    <div class="bottomBlock bottom p-4 align-items-center justify-content-center">
+                        <p class="textBottom">
+                            Special bonuses for active users
+                        </p>
+                    </div>
+                </div>
+                <div class="col-5 row no-gutters align-items-center justify-content-center">
+                    <div class="middleBlock align-items-center justify-content-center">
+                        <img src="../images/verifiedCreators.svg"  width ="440px" height="458px"/> <!-- width ="440px" height="458px" -->
+                    </div>
+                </div>
+                <div class="col-3_5 row no-gutters align-items-start justify-content-end">
+                    <div class="topBlock paddingBlock">
+                        <div class="topRightIcon align-items-center justify-content-center">
+                            <img src="../images/qMark.svg" width="20px" height="34px"/>
+                        </div>
+                        <p class="titleBlock mt-3 mb-2">
+                            Fully anonymous
+                        </p>
+                        <p class="underTitleBlock">
+                            Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque
+                        </p>
+                    </div>
+                    <div class="bottomBlock bottom p-4 align-items-center justify-content-center">
+                        <p class="textBottom">
+                            User-friendly interface
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How it works container -->
+        <div class="container mt-7">
+            <div class="row no-gutters mt-3">
+                <div class="col-7 no-gutters">
+                        <p class="titleHowItWorks mb-5">
+                            How it works 
+                        </p>
+                        <div class="row no-gutters mb-4">
+                            <div class="smallYellowCircle offset-1-right mt-1_5"></div>
+                            <p class="underHowItWorks">
+                                Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore
+                            </p>
+                        </div>
+                        <div class="row no-gutters mb-4">
+                            <div class="smallGreenCircle offset-1-right mt-1_5"></div>
+                            <p class="underHowItWorks">
+                                Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore
+                            </p>
+                        </div>
+                        <div class="row no-gutters mb-4">
+                            <div class="smallVioletCircle offset-1-right mt-1_5"></div>
+                            <p class="underHowItWorks">
+                                Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore
+                            </p>
+                        </div>
+                </div>
+                <div class="col-5 row no-gutters align-items-center justify-content-end">
+                        <div class="howItWorksBlock align-items-center justify-content-center">
+                            <img src="../images/iPhone.svg"  width ="422.05px" height="461px"/>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Background glow -->
+    <div class="glowCircle"><div>
+
+
+
+
+
+
+
+
     <div id="noting">
         <section class="sectionMain">
             <div class="container">
@@ -129,7 +339,7 @@
 
             function click(code)
             {
-                var link = 'tg://resolve?domain=MidnightChat_bot&start=' + code;
+                var link = 'https://t.me/MidnightChat_bot?start=' + code;
                 location.href = link; 
                 console.log(link);
                 if (location.herf === link)

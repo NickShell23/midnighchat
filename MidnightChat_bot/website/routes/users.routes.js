@@ -10,11 +10,11 @@ router.get('/all', usersController.findAll);
 // Create a new ad
 router.route('/new').post(usersController.create);
 
-// Retrieve a single ad with id
-router.get('/:id', usersController.findOne);
+// Retrieve a single ad with verif_code
+router.get('/:verif_code', usersController.findOne);
 
-// Update an ad with id
-router.put('/:id', usersController.update);
+// Update an ad with randomcode
+router.put('/:verif_code', usersController.update);
 
 // Delete an ad with id
 router.delete('/:id', usersController.delete);

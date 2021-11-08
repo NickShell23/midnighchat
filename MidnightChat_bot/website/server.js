@@ -53,10 +53,10 @@ const Company = db.company
 const Ad = db.ad;
 const Creator = db.creators;
 
-db.sequelize.sync({ force: true }).then(() => {
+/* db.sequelize.sync({ force: true }).then(() => {
     console.log('Drop and Resync Db');
     initial();
-});
+}); */
 
 // Initial DB informations
 function initial() {

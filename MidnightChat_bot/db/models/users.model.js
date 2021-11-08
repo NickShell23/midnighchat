@@ -1,6 +1,6 @@
 // var dbConn = require('./../config/server');
 
-//People object create
+//Users object create
 
 module.exports = (sequelize, Sequelize) => {
     const bcrypt = require("bcryptjs");
@@ -27,7 +27,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         verif_code: {
             type: Sequelize.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         balance: {
             type: Sequelize.STRING,
