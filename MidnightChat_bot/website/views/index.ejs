@@ -16,6 +16,13 @@
 
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/start/jquery-ui.css" type="text/css" media="all" />
 
+    <!-- / -->
+    <link rel="stylesheet" href="owlCarousel/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="owlCarousel/assets/owl.theme.default.min.css">
+
+<!--     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css"> -->
 
 </head>
 
@@ -23,35 +30,63 @@
     <!-- Header container -->
     <section class="ourSection"> 
         <div class="container">
-            <div class = "row no-gutters align-self-center">
-                <!-- tg://resolve?domain=MidnightChat_bot&start= -->
-                <div class= "col-2">
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand marginNearLogo" href="">
                     <img src="../images/midnightLogo.svg" width="187px" height="38px"/>
-                </div>
-                <div class= "col-8 row no-gutters align-items-center">
-                    <a href="" class ="headerLinks offset-headerLinks marginNearLogo">
-                        About
-                    </a>
-                    <a href="" class ="headerLinks offset-headerLinks">
-                        Advantages
-                    </a>
-                    <a href="" class ="headerLinks offset-headerLinks" >
-                        How it works
-                    </a>
-                    <a href="" class ="headerLinks offset-headerLinks">
-                        Reviews
-                    </a>
-                    <a href="" class ="headerLinks">
-                        FAQ
-                    </a>
-                </div>
-                <div class= "col-2">
-                    <div class ="btn startBtn right" onclick="onhover()">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"><img src="../images/burger.png" width="31px" height="26px"/></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"> <!-- active -->
+                        <a href="#" class="nav-link headerLinks offset-headerLinks">
+                            About<span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link headerLinks offset-headerLinks">
+                            Advantages
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link headerLinks offset-headerLinks">
+                            How it works
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link headerLinks offset-headerLinks">
+                            Reviews
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link headerLinks offset-headerLinks">
+                            FAQ
+                        </a>
+                    </li>
+                    <!-- <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </li> -->
+                    <!-- <li class="nav-item">
+                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li> -->
+                    </ul>
+                    <div class ="btn startBtn right marginStartBtn" onclick="onhover()">
                         Start
                     </div>
                 </div>
+              </nav>
 
-            </div>
+              <!-- tg://resolve?domain=MidnightChat_bot&start= -->
         </div>
     </section>
     <hr class="headerLine">
@@ -60,48 +95,131 @@
     <section class="ourSection"> 
         <div class="container">
             <div class="row no-gutters">
-                <div class="col-6 mt-5">
-                    <p class="mainText mb-0 pb-0">
-                        Meet and look at beautiful girls with 
+                <div class="col-lg-6 mt-5">
+                    <p class="mainText pb-0 mb-4">
+                        <span class="wordMidnight">
+                            Midnight
+                        </span>
+                        - brand new premium content platform directly in your messenger
                     </p>
-                    <p class="wordMidnight mb-4">
-                        Midnight
-                    </p>
+                    
                     <p class="smallerMainText">
-                        Sed ut perspiciatis, unde omnis iste natus 
-                        error sit voluptatem accusantium doloremque 
-                        laudantium, totam rem aperiam eaque ipsa, quae 
-                        ab illo inventore veritatis et quasi architecto 
-                        beatae vitae dicta
+                        Chatting, video conversations, premium content 
+                        - all in Midnight. Get closer to content creators
+                        and get access to amazing content and services with Midnight 
                     </p>
-                    <button class="btn mainBtn mt-5 mb-4">Get Started</button>
-                    <div class="row no-gutters">
+                    <div class="d-md-flex align-items-center justify-content-center">
+                        <button class="btn mainBtn mt-5 mb-4">Get Started</button>
+                    </div>
+                    <div class="row no-gutters d-md-flex align-items-center-md justify-content-center-md">
                         <div class="smallYellowCircle offset-1-right mt-1">
                         </div>
-                        <p class="textNearYellow">
+                        <p class="textNearYellow mb-0">
                             get started and get a bonus as a gift
                         </p>
                     </div>
                 </div>
-                <div class="col-6">
-                    <!-- Slider -->
+                <div class="col-lg-6 mt-3 d-lg-flex justify-content-center">
+                    <div class="bgImgWelcome paddingImgWelcome"> 
+						<div class="welcome-hero owl-one welcome-carousel owl-carousel">
+							<div class="item">
+								<div class="welcome-work">
+									<div class="img d-flex align-items-end justify-content-center" style="background-image: url(../images/alexa.png);">
+										<div class="row no-gutters insideImgBlock align-items-center justify-content-start mb-3">
+                                            <div>
+                                                <p class="insideImgText mb-0 offset-1">
+                                                    Alexa Catarsis, 21 y.o
+                                                </p>
+                                            </div>
+                                            <div class="offset-1">
+                                                <img src="../images/fr.png" width="26px" height="26px"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="welcome-work">
+									<div class="img d-flex align-items-end justify-content-center" style="background-image: url(../images/123.png);">
+										<div class="row no-gutters insideImgBlock align-items-center justify-content-start mb-3">
+                                            <div>
+                                                <p class="insideImgText mb-0 offset-1">
+                                                    Alexa Catarsis, 21 y.o
+                                                </p>
+                                            </div>
+                                            <div class="offset-1">
+                                                <img src="../images/fr.png" width="26px" height="26px"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="welcome-work">
+									<div class="img d-flex align-items-end justify-content-center" style="background-image: url(../images/alexa.png);">
+										<div class="row no-gutters insideImgBlock align-items-center justify-content-start mb-3">
+                                            <div>
+                                                <p class="insideImgText mb-0 offset-1">
+                                                    Alexa Catarsis, 21 y.o
+                                                </p>
+                                            </div>
+                                            <div class="offset-1">
+                                                <img src="../images/fr.png" width="26px" height="26px"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="welcome-work">
+									<div class="img d-flex align-items-end justify-content-center" style="background-image: url(../images/alexa.png);">
+										<div class="row no-gutters insideImgBlock align-items-center justify-content-start mb-3">
+                                            <div>
+                                                <p class="insideImgText mb-0 offset-1">
+                                                    Alexa Catarsis, 21 y.o
+                                                </p>
+                                            </div>
+                                            <div class="offset-1">
+                                                <img src="../images/fr.png" width="26px" height="26px"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="welcome-work">
+									<div class="img d-flex align-items-end justify-content-center" style="background-image: url(../images/alexa.png);">
+										<div class="row no-gutters insideImgBlock align-items-center justify-content-start mb-3">
+                                            <div>
+                                                <p class="insideImgText mb-0 offset-1">
+                                                    Alexa Catarsis, 21 y.o
+                                                </p>
+                                            </div>
+                                            <div class="offset-1">
+                                                <img src="../images/fr.png" width="26px" height="26px"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+						</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Statistic container -->
-    <section class="ourSection mb-7"> 
+    <section class="ourSection mb-7 mt-lg-7"> 
         <div class="container">
-            <div class="row no-gutters bg_statisticBlock mt-3 paddingInTheMiddle">
-                <div class="col-4 row no-gutters align-items-center justify-content-center">
-                    <div class="col-5">
-                        <div class="circleInStatic offset-1-right right align-items-center justify-content-center">
-                            <img src="../images/bi_person-bounding-box.svg" width="27px" height="27px"/>
+            <div class="row no-gutters bg_statisticBlock mt-3 paddingInTheMiddle pt-lg-4 pb-lg-4">
+                <div class="col-md-4 row no-gutters align-items-center justify-content-center">
+                    <div class="col-lg-5 col-xsm-6 pr-lg-1">
+                        <div class="circleInStatic mr-3 right align-items-center justify-content-center">
+                            <img class="iconInStatic" src="../images/bi_person-bounding-box.svg" />
                         </div>
                     </div>
-                    <div class="col-7 row no-gutters align-items-center justify-content-center">
-                        <div class="col-11 mt-3">
+                    <div class="col-lg-7 col-xsm-6 row no-gutters align-items-center justify-content-center">
+                        <div class="col-11 mt-3 pl-lg-1">
                             <p class="textInStatic offset-1-right mb-1">
                                 100+
                             </p>
@@ -110,20 +228,20 @@
                             </p>
                         </div>
                         <div class="col-1">
-                            <img class="right" src="../images/vl.svg"/>
+                            <img class="right vl" src="../images/vl.svg"/>
                             <!-- <div class="vl right"></div> -->
                         </div>
                     </div>
 
                 </div>
-                <div class="col-4 row no-gutters align-items-center justify-content-center">
-                    <div class="col-5">
-                        <div class="circleInStatic offset-1-right right align-items-center justify-content-center">
-                            <img src="../images/play.svg" width="27px" height="27px"/>
+                <div class="col-md-4 row no-gutters align-items-center justify-content-center">
+                    <div class="col-lg-5 col-xsm-6 pr-lg-1">
+                        <div class="circleInStatic mr-3 right align-items-center justify-content-center">
+                            <img class="iconInStatic" src="../images/play.svg"/>
                         </div>
                     </div>
-                    <div class="col-7">
-                        <div class="col-11 mt-3">
+                    <div class="col-lg-7 col-xsm-6 pl-lg-1">
+                        <div class="col-11-no-gutters mt-3">
                             <p class="textInStatic offset-1-right mb-1">
                                 100+
                             </p>
@@ -133,21 +251,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4 row no-gutters align-items-center justify-content-center">
-                    <div class="col-5 row no-gutters align-items-center justify-content-center">
+                <div class="col-md-4 row no-gutters align-items-center justify-content-center">
+                    <div class="col-lg-5 col-xsm-6 pr-lg-1 row no-gutters align-items-center justify-content-center">
                         <div class="col-1">
-                            <img src="../images/vl.svg"/>
+                            <img class="vl" src="../images/vl.svg"/>
                             <!-- <svg xmlns="../images/Vector 16.svg" width="10" height="155"> </svg> -->
 
                             <!-- <div class="vl"></div> -->
                         </div>
                         <div class="col-11">
-                            <div class="circleInStatic offset-1-right right align-items-center justify-content-center">
-                                <img src="../images/landscape.svg" width="27px" height="27px"/>
+                            <div class="circleInStatic mr-3 right align-items-center justify-content-center">
+                                <img class="iconInStatic" src="../images/landscape.svg"/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-7 mt-3"> 
+                    <div class="col-lg-7 col-xsm-6 mt-3 pl-lg-1"> 
                     <p class="textInStatic mb-1">
                         100+
                     </p>
@@ -175,30 +293,30 @@
             </div>
 
             <div class="row no-gutters mt-3">
-                <div class="col-3_5 row no-gutters">
+                <div class="col-lg-3_5 row no-gutters">
                     <div class="topBlock paddingBlock">
                         <div class="topLeftIcon align-items-center justify-content-center">
                             <img src="../images/landscapeWhite.svg" width="34px" height="34px"/>
                         </div>
-                        <p class="titleBlock mt-3 mb-2">
+                        <p class="titleBlock mt-3 mb-2 mb-lg-3">
                             Unique content
                         </p>
                         <p class="underTitleBlock">
                             Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque
                         </p>
                     </div>
-                    <div class="bottomBlock bottom p-4 align-items-center justify-content-center">
+                    <div class="mt-lg-4 bottomBlock bottom p-4 align-items-center justify-content-center">
                         <p class="textBottom">
                             Special bonuses for active users
                         </p>
                     </div>
                 </div>
-                <div class="col-5 row no-gutters align-items-center justify-content-center">
+                <div class="col-lg-5 mt-lg-4 row no-gutters align-items-center justify-content-center">
                     <div class="middleBlock align-items-center justify-content-center">
-                        <img src="../images/verifiedCreators.svg"  width ="440px" height="458px"/> <!-- width ="440px" height="458px" -->
+                        <img class="verifiedCreators" src="../images/verifiedCreators.svg"/> <!-- width ="440px" height="458px" -->
                     </div>
                 </div>
-                <div class="col-3_5 row no-gutters align-items-start justify-content-end">
+                <div class="col-lg-3_5 mt-lg-4 row no-gutters align-items-start justify-content-end">
                     <div class="topBlock paddingBlock">
                         <div class="topRightIcon align-items-center justify-content-center">
                             <img src="../images/qMark.svg" width="20px" height="34px"/>
@@ -210,7 +328,7 @@
                             Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque
                         </p>
                     </div>
-                    <div class="bottomBlock bottom p-4 align-items-center justify-content-center">
+                    <div class="mt-lg-4 bottomBlock bottom p-4 align-items-center justify-content-center">
                         <p class="textBottom">
                             User-friendly interface
                         </p>
@@ -222,8 +340,8 @@
         <!-- How it works container -->
         <div class="container mt-7">
             <div class="row no-gutters mt-3">
-                <div class="col-7 no-gutters">
-                        <p class="titleHowItWorks mb-5">
+                <div class="col-lg-7 no-gutters">
+                        <p class="titleHowItWorks mb-5 ml-md-7_5 ml-sm-3">
                             How it works 
                         </p>
                         <div class="row no-gutters mb-4">
@@ -245,7 +363,7 @@
                             </p>
                         </div>
                 </div>
-                <div class="col-5 row no-gutters align-items-center justify-content-end">
+                <div class="col-lg-5 row no-gutters align-items-center justify-content-end justify-content-center-phone">
                         <div class="howItWorksBlock align-items-center justify-content-center">
                             <img src="../images/iPhone.svg"  width ="422.05px" height="461px"/>
                         </div>
@@ -254,6 +372,216 @@
         </div>
     </section>
 
+    <section class="reviewsSection mt-15_5">
+            <!-- Reviews container -->
+            <div class="container mb-3">
+                <div class="row no-gutters align-items-center justify-content-center">
+                        <p class="advantagesTitle mb-3 mt-4">
+                            Reviews
+                        </p>
+                </div>
+                <div class="row no-gutters align-items-center justify-content-center">
+                    <p class="advantagesSmallerText mb-5">
+                        These are the stories of our customers who have joined us with great pleasure when using this crazy feature                    </p>
+                </div>
+            </div>
+
+            <div class="row no-gutters heightReviews">
+                <div class="col-md-12">
+                    <div class="d-flex align-items-center justify-content-start"> 
+						<div class="reviews-hero reviews-carousel owl-carousel">
+							<div class="item">
+								<div class="reviews-work">
+									<div class="d-flex align-items-end justify-content-center">
+										<div class="blockReviews row no-gutters align-items-center justify-content-start mb-3">
+                                            <div>
+                                            </div>
+                                            <div class="forRating">
+                                                <img class="right" src="../images/forRating.png"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="reviews-work">
+									<div class="d-flex align-items-end justify-content-center">
+										<div class="blockReviews row no-gutters align-items-center justify-content-start mb-3">
+                                            <div>
+                                            </div>
+                                            <div class="forRating">
+                                                <img class="right" src="../images/forRating.png"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="reviews-work">
+									<div class="d-flex align-items-end justify-content-center">
+										<div class="blockReviews row no-gutters align-items-center justify-content-start mb-3">
+                                            <div>
+                                            </div>
+                                            <div class="forRating">
+                                                <img class="right" src="../images/forRating.png"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="reviews-work">
+									<div class="d-flex align-items-end justify-content-center">
+										<div class="blockReviews row no-gutters align-items-center justify-content-start mb-3">
+                                            <div>
+                                            </div>
+                                            <div class="forRating">
+                                                <img class="right" src="../images/forRating.png"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="reviews-work">
+									<div class="d-flex align-items-end justify-content-center">
+										<div class="blockReviews row no-gutters align-items-center justify-content-start mb-3">
+                                            <div>
+                                            </div>
+                                            <div class="forRating">
+                                                <img class="right" src="../images/forRating.png"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                            <div class="item">
+								<div class="reviews-work">
+									<div class="d-flex align-items-end justify-content-center">
+										<div class="blockReviews row no-gutters align-items-center justify-content-start mb-3">
+                                            <div>
+                                            </div>
+                                            <div class="forRating">
+                                                <img class="right" src="../images/forRating.png"/>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- FAQ container -->
+            <div class="container faqPadding mt-5">
+                <div class="row no-gutters align-items-start align-items-center-md justify-content-start justify-content-center-md">
+                        <p class="faqTitle mb-5">
+                            Frequently asked questions
+                        </p>
+                </div>
+                <!-- Row 1 -->
+                <div class="row faqRow no-gutters mb-3 align-items-start justify-content-start">
+                    <div class="col-11">
+                        <p class="faqRowText pt-3 pt-lg-4">
+                            1. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque?
+                        </p>
+                    </div>
+                    <div class="col-1 pt-2_5 pt-lg-3_5">
+                        <button class="btn btnFaq faqPlus right align-items-center justify-content-center"> + </button>
+                    </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="row faqRow no-gutters mb-3 align-items-start justify-content-start">
+                    <div class="col-11">
+                        <p class="faqRowText pt-3 pt-lg-4">
+                            2. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque?
+                        </p>
+                    </div>
+                    <div class="col-1 pt-2_5 pt-lg-3_5">
+                        <button class="btn btnFaq faqPlus right align-items-center justify-content-center"> + </button>
+                    </div>
+                </div>
+                <!-- Row 3 -->
+                <div class="row faqRow no-gutters mb-3 align-items-start justify-content-start">
+                    <div class="col-11">
+                        <p class="faqRowText pt-3 pt-lg-4">
+                            3. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque?
+                        </p>
+                    </div>
+                    <div class="col-1 pt-2_5 pt-lg-3_5">
+                        <button class="btn btnFaq faqPlus right align-items-center justify-content-center"> + </button>
+                    </div>
+                </div>
+                <!-- Row 4 -->
+                <div class="row faqRow no-gutters mb-3 align-items-start justify-content-start">
+                    <div class="col-11">
+                        <p class="faqRowText pt-3 pt-lg-4">
+                            4. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque?
+                        </p>
+                    </div>
+                    <div class="col-1 pt-2_5 pt-lg-3_5">
+                        <button class="btn btnFaq faqPlus right align-items-center justify-content-center"> + </button>
+                    </div>
+                </div>
+                <!-- Row 5 -->
+                <div class="row faqRow no-gutters mb-3 align-items-start justify-content-start">
+                    <div class="col-11">
+                        <p class="faqRowText pt-3 pt-lg-4">
+                            5. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque?
+                        </p>
+                    </div>
+                    <div class="col-1 pt-2_5 pt-lg-3_5">
+                        <button class="btn btnFaq faqPlus right align-items-center justify-content-center"> + </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- cta container -->
+    <section class="ctaSection">
+        <div class="container bg_ctaBlock marginContainerCta">
+            <div class="row no-gutters align-items-center justify-content-center">
+                <div class="col-md-6 d-flex align-items-center justify-content-start justify-content-center-md">
+                    <div>
+                        <p class="ctaTitle mb-4">
+                            Subscribe Now for Get Special Features!
+                        </p>
+                        <p class="ctaUnderTitle">
+                            Let's subscribe with us and find the fun.                        
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-center justify-content-end justify-content-center-md mt-md-4">
+                    <button class="btn mainBtn widthBtnPh">Get Started</button>
+                </div>
+            </div>
+            <div class="ctaSection shadowCta"></div>
+        </div>
+    </section>
+
+    <!-- cta container 2 -->
+    <section class="ctaSection2">
+        <div class="container bg_ctaBlock marginContainerCta">
+            <div class="row no-gutters align-items-center justify-content-center">
+                <div class="col-md-6 d-flex align-items-center justify-content-start justify-content-center-md">
+                    <div>
+                        <p class="ctaTitle mb-4">
+                            Subscribe Now for Get Special Features!
+                        </p>
+                        <p class="ctaUnderTitle">
+                            Let's subscribe with us and find the fun.                        
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-center justify-content-end justify-content-center-md mt-md-4">
+                    <button class="btn mainBtn widthBtnPh">Get Started</button>
+                </div>
+            </div>
+            <div class="shadowCta"></div>
+        </div>
+    </section>
 
     <!-- Background glow -->
     <div class="glowCircle"><div>
@@ -274,8 +602,126 @@
             </div>
         </section>
                     
-        
-    <script>
+    
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+ <!--    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script> -->
+    
+    <!-- / -->
+    <script src="owlCarousel/owl.carousel.js"></script>
+    <script src="owlCarousel/owl.carousel.min.js"></script>
+
+<script>
+    (function($) {
+
+        "use strict";
+
+        var fullHeight = function() {
+
+            $('.js-fullheight').css('height', $(window).height());
+            $(window).resize(function(){
+                $('.js-fullheight').css('height', $(window).height());
+            });
+
+        };
+        fullHeight();
+
+        var carouselWelcome = 
+            $('.welcome-carousel').owlCarousel({
+            loop:true,
+            autoplay: false,
+            margin:30,
+            animateOut: 'fadeOut',
+            animateIn: 'fadeIn',
+            smartSpeed: 1000,
+            nav:true,
+            dots: true,
+            autoplayHoverPause: false,
+            items: 1,
+            navText : ["<span class='ion-ios-arrow-back'></span>","<span class='ion-ios-arrow-forward'></span>"],
+            responsive:{
+                0:{
+                    items:1
+                },
+                767:{
+                    items:1,
+                    nav:true
+                }
+            },
+            });
+
+            var carouselReciews = 
+            $('.reviews-carousel').owlCarousel({
+            loop:true,
+            autoplay: false,
+            margin:2.5,
+            animateOut: 'fadeOut',
+            animateIn: 'fadeIn',
+            smartSpeed: 1000,
+            nav:true,
+            dots: true,
+            autoplayHoverPause: false,
+            items: 4,
+            navText : ["<span class='navLeft'></span>","<span class='navRight'></span>"],
+            responsive:{
+                0:{
+                    dotsEach: 1,
+                    items:1,
+                },
+                800:{
+                    dotsEach: 1,
+                    items:2,
+                },
+                1200:{
+                    dotsEach: 1,
+                    items:3,
+                },
+                1600:{
+                    dotsEach: 1,
+                    items:4,
+                }
+            }
+            });
+        /* carousel(); */
+
+/*         carouselWelcome.on('changed.owl.carousel', function(event) {
+            navigationFill();
+        })
+
+        function navigationFill() {  
+
+            // Reset the width of all the 'dots'
+            var pr = $(".owl-carousel .owl-dots .owl-dot span");
+            $(pr).innerHTML(`123`);
+
+            var progressbar = $(".owl-carousel .owl-dots .owl-dot.active span");
+            $(progressbar).css({ width: "43px" });
+
+        } */
+
+    })(jQuery);
+
+/*     owl.on('changed.owl.carousel', function(event) {
+    navigationFill();
+    })
+
+    function navigationFill() {  
+
+        // Reset the width of all the 'dots'
+        var pr = $(".owl-theme .owl-dots .owl-dot span");
+        $(pr).css({ width: "0%" });
+
+        var progressbar = $(".owl-theme .owl-dots .owl-dot.active span");
+        $(progressbar).animate({ width: "100%" }, 'slow');
+
+    } */
+</script>
+<!--     <script>
         var search_input = document.querySelector("#search_input");
         document.getElementById("noting").style.display = "none";
 
@@ -303,14 +749,8 @@
 
         });
 
-    </script>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/popper.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    
+    </script> -->
+
     <script>
         function onhover()
         {
