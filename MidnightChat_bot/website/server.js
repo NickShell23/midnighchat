@@ -145,7 +145,7 @@ const { log } = require('console');
 const { company } = require('../db/models');
 
 // first part of the routes
-app.use('/', authRoutes);
+/* app.use('/', authRoutes); */
 app.use('/', indexRoutes);
 app.use('/users/', usersRoutes);
 app.use('/companies/', companiesRoutes);
