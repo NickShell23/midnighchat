@@ -972,28 +972,61 @@ border-radius: 55px;
 
 .howItWorksBlock
 {
-  width: 492px;
+  width: 422.05px;
   height: 461px;
   display: flex;
 
   background: #FFFFFF;
   border-radius: 55px;
+  overflow: hidden;
+
 }
+@media (max-width: 1199px) {
+  .howItWorksBlock{
+    height: 0;
+    padding-bottom: 100%;
+    width: 100%;} } 
+@media (max-width: 991px) {
+  .howItWorksBlock{
+    height: 0;
+    padding-bottom: 70%;
+    width: 70%;} } 
+
 @media (max-width: 575px) {
   .howItWorksBlock{
     height: 0;
     padding-bottom: 100%;
-    width: 100%;
-    overflow: hidden;} } 
+    width: 100%;} } 
 
+  .imgHowItWorks{
+    height: auto;
+    width: 100%;
+    position: relative;
+    top: 58px;
+  }
+
+@media (max-width: 1px) {
+  .imgHowItWorks{
+    position: relative;
+    top: 20px;
+  }
+}    
+@media (max-width: 1199px) {
+  .imgHowItWorks{
+    position: relative;
+    top: 20px;
+  }
+}    
 @media (max-width: 575px) {
     .imgHowItWorks{
       position: relative;
-      top: -10px;
-    }}
+      top: 10px;
+    }
+}
+
 @media (max-width: 419px) {
   .imgHowItWorks{
-    top: -45px;
+    top: 20px;
   }}
 
 .titleHowItWorks
@@ -1107,7 +1140,7 @@ border-radius: 55px;
 .shadowCta
 {
   position: absolute;
-  width: 1077.17px;
+  width: auto;
   height: 250px;
   left: 182px;
   top: 10px;
@@ -1121,32 +1154,27 @@ border-radius: 55px;
 @media (max-width: 1199px) {
   .shadowCta{
     height: 220px;
-    width: 800px;
   } }
 @media (max-width: 991px) {
   .shadowCta{
     height: 220px;
-    width: 690px;
   } }
 @media (max-width: 767px) {
   .shadowCta{
     height: 310px;
-    width: 560px;
     left: 105px;} }
 @media (max-width: 575px) {
   .shadowCta{
-    left: 75px;
-    width: 427px;} }
+    left: 75px;} }
 @media (max-width: 419px) {
   .shadowCta{
-    width: 370px;
     left: 25px;} }
 
 .bg_ctaBlock
 {
-  
   background: #FFFFFF;
   border-radius: 15px;
+  overflow: hidden;
 }
 
 .ctaTitle
