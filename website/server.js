@@ -49,14 +49,15 @@ const sequelize = new Sequelize(
 const db = require("../db/models");
 const Role = db.role;
 const User = db.users;
+const Location = db.locations;
 const Company = db.company
 const Ad = db.ad;
 const Creator = db.creators;
 
-/* db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: true }).then(() => {
     console.log('Drop and Resync Db');
     initial();
-}); */
+}); 
 
 // Initial DB informations
 function initial() {
@@ -89,32 +90,10 @@ function initial() {
         "verif_code": "345678",
         "balance": "345678",
     });
-    Creator.create({
+    Location.create({
         "tg_id": "3456789",
-        "tg_userName": "@TOTO1",
-        "first_name": "zxczxc",
-        "last_name": "qweqwe",
-        "email": "toto3@gmail.com",
         "verif_code": "345678",
-        "balance": "345678",
-    });
-    Creator.create({
-        "tg_id": "3456789",
-        "tg_userName": "@TOTO2",
-        "first_name": "zxczxc",
-        "last_name": "qweqwe",
-        "email": "toto3@gmail.com",
-        "verif_code": "345678",
-        "balance": "345678",
-    });
-    Creator.create({
-        "tg_id": "3456789",
-        "tg_userName": "@TOTO3",
-        "first_name": "zxczxc",
-        "last_name": "qweqwe",
-        "email": "toto3@gmail.com",
-        "verif_code": "345678",
-        "balance": "345678",
+        "country": "FR",
     });
 
 
@@ -133,6 +112,7 @@ console.log(global.appRoot);
 // Require routes
 const authRoutes = require('./routes/auth.routes');
 const usersRoutes = require('./routes/users.routes');
+const locationsRoutes = require('./routes/locations.routes');
 const applicationsRoutes = require('./routes/applications.routes');
 const adsRoutes = require('./routes/ads.routes');
 const companiesRoutes = require('./routes/companies.routes');
@@ -148,6 +128,7 @@ const { company } = require('../db/models');
 /* app.use('/', authRoutes); */
 app.use('/', indexRoutes);
 app.use('/users/', usersRoutes);
+app.use('/locations/', locationsRoutes);
 app.use('/companies/', companiesRoutes);
 app.use('/ads/', adsRoutes);
 app.use('/apps/', applicationsRoutes);

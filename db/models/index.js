@@ -24,8 +24,11 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.users = require("./users.model.js")(sequelize, Sequelize);
-db.creators = require("./creators.model.js")(sequelize, Sequelize);
-/* db.role = require("../models/roles.model.js")(sequelize, Sequelize);
+db.msgtodelete = require("./msgtodelete.model.js")(sequelize, Sequelize);
+db.profilePhotos = require("./profilePhotos.model.js")(sequelize, Sequelize);
+db.locations = require("./locations.model.js")(sequelize, Sequelize);
+/* db.creators = require("./creators.model.js")(sequelize, Sequelize);
+db.role = require("../models/roles.model.js")(sequelize, Sequelize);
 db.company = require("../models/companies.model.js")(sequelize, Sequelize);
 db.ad = require("../models/ads.model.js")(sequelize, Sequelize);
 db.application = require("../models/applications.model.js")(sequelize, Sequelize); */

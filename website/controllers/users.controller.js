@@ -22,6 +22,8 @@ exports.create = (req, res) => {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
+      gender: req.body.gender,
+      orientation: req.body.orientation,
       verif_code: req.body.verif_code,
       balance: req.body.balance,
   };
@@ -69,6 +71,8 @@ exports.findOne = (req, res) => {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
+        gender: req.body.gender,
+        orientation: req.body.orientation,
         verif_code: req.body.verif_code,
         balance: req.body.balance,
     }
@@ -117,6 +121,8 @@ exports.update = (req, res) => {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
+      gender: req.body.gender,
+      orientation: req.body.orientation,
       verif_code: req.body.verif_code,
       balance: req.body.balance,
   }

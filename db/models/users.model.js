@@ -25,18 +25,30 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: true,
         },
+        photo: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        description: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        gender: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        interestedIn: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
         verif_code: {
             type: Sequelize.STRING,
             allowNull: true,
         },
         balance: {
             type: Sequelize.STRING,
-            allowNull: false,
-        },
-        /*gender: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        }, */
+            allowNull: true,
+        }
 
     });
 

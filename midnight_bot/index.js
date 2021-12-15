@@ -2,6 +2,20 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+const imgur = require('imgur');
+
+
+//jQuery
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+var $ = jQuery = require('jquery')(window);
+///////////////////////////////
+
+
 const telegramBot=require('node-telegram-bot-api');
 
 
@@ -30,24 +44,49 @@ const sequelize = new Sequelize(
 );
 
 const db = require("../db/models");
+const e = require('express');
 const User = db.users;
-const Creator = db.creators;
+const Location = db.locations;
+const msgToDelete = db.msgtodelete;
+const ProfilePhotos = db.profilePhotos;
 
-/* db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: true }).then(async () => {
     console.log('Drop and Resync Db');
-    initial();
-}); */
+    // msgToDelete.create({
+    //     "tg_id": "3456789",
+    // });
+     initial();
+    
+});
 
 // Initial DB informations
-function initial() {
+async function initial() {
 
     // USERS
+    msgToDelete.create({
+        "tg_id": "3456789",
+    });
+    ProfilePhotos.create({
+        "tg_id": "3456789",
+    });
+    Location.create({
+        "verif_code": "123456",
+        "city": "Ivry-sur-Seine",
+        "region": "Île-de-France",
+        "country": "FR",
+        "latitude": "48.8157",
+        "longitude": "2.3849",
+    });
     User.create({
-        "tg_id": "1234567",
+        "tg_id": "598357235",
         "tg_userName": "@Khada",
         "first_name": "qweqwe",
         "last_name": "asdasd",
         "email": "toto@gmail.com",
+        "photo": "path",
+        "description": "cool, handsome, young",
+        "gender": null,
+        "interestedIn": null,
         "verif_code": "123456",
         "balance": "123456",
     });
@@ -57,6 +96,10 @@ function initial() {
         "first_name": "asdasd",
         "last_name": "zxczxc",
         "email": "toto2@gmail.com",
+        "photo": "path",
+        "description": "cool, handsome, young",
+        "gender": null,
+        "interestedIn": null,
         "verif_code": "234567",
         "balance": "234567",
     });    
@@ -66,39 +109,34 @@ function initial() {
         "first_name": "zxczxc",
         "last_name": "qweqwe",
         "email": "toto3@gmail.com",
+        "photo": "path",
+        "description": "cool, handsome, young",
+        "gender": null,
+        "interestedIn": null,
         "verif_code": "345678",
         "balance": "345678",
     });
-    Creator.create({
-        "tg_id": "3456789",
-        "tg_userName": "@TOTO1",
-        "first_name": "zxczxc",
-        "last_name": "qweqwe",
-        "email": "toto3@gmail.com",
-        "verif_code": "345678",
-        "balance": "345678",
+    Location.create({
+        "verif_code": "234567",
+        "city": "Ivry-sur-Seine",
+        "region": "Île-de-France",
+        "country": "FR",
+        "latitude": "48.8157",
+        "longitude": "2.3849",
     });
-    Creator.create({
-        "tg_id": "3456789",
-        "tg_userName": "@TOTO2",
-        "first_name": "zxczxc",
-        "last_name": "qweqwe",
-        "email": "toto3@gmail.com",
+    Location.create({
         "verif_code": "345678",
-        "balance": "345678",
-    });
-    Creator.create({
-        "tg_id": "3456789",
-        "tg_userName": "@TOTO3",
-        "first_name": "zxczxc",
-        "last_name": "qweqwe",
-        "email": "toto3@gmail.com",
-        "verif_code": "345678",
-        "balance": "345678",
+        "city": "Ivry-sur-Seine",
+        "region": "Île-de-France",
+        "country": "FR",
+        "latitude": "48.8157",
+        "longitude": "2.3849",
     });
 
 
 }
+
+
 
 const {TOKEN, SERVER_URL} = process.env;
 
@@ -129,29 +167,76 @@ var userMessage_id = null;
 var botMessage_id = null;
 
 
-
+const genderKeyboard = [
+    [
+        {
+            text:'Male 🚹',
+            callback_data: 'maleGender'
+        },
+        {
+            text:'Female 🚺',
+            callback_data: 'femaleGender'
+        }
+    ]
+];
+const interestedInKeyboard = [
+    [
+        {
+            text:'Men 🙋‍♂️',
+            callback_data: 'maleOrientated'
+        },
+        {
+            text:'Women 🙋‍♀️',
+            callback_data: 'femaleOrientated'
+        },
+        {
+            text:'Both 👫',
+            callback_data: 'bothOrientated'
+        }
+    ]
+];
+const interestedInChangeKeyboard = [
+    [
+        {
+            text:'Men 🙋‍♂️',
+            callback_data: 'changeToMaleOrientated'
+        }
+    ],
+    [
+        {
+            text:'Women 🙋‍♀️',
+            callback_data: 'changeToFemaleOrientated'
+        }
+    ],
+    [
+        {
+            text:'Both 👫',
+            callback_data: 'changeToBothOrientated'
+        }
+    ]
+];
 
 const mainKeyboard = [
     [
         {
-            text:'Midnight Feed 🌅',
-            url: 'https://google.com'
+            text:'Find a Mate 👫',
+            callback_data:  'findingMate'
         }
     ],
     [
         {
-            text:'Creators list 📷',
-            callback_data: 'creatorsList'
+            text:'Sympothy 👩‍❤️‍👨',
+            callback_data:  'sympothy'
+        }
+    ],
+    [
+        {
+                text:'My Profile 👤',
+                callback_data: 'profile'
         },
         {
-            text:'Active subscriptions ✅',
-            callback_data: 'activeSubscriptions'
-        }
-    ],
-    [
-        {
-            text:'My Profile 👤',
-            callback_data: 'profile'
+            text:'Tariff plans ✅',
+            callback_data: 'tariffPlans'
         }
     ],
     [
@@ -165,7 +250,112 @@ const mainKeyboard = [
         }
     ],
 ];
-const creatorsListKeyboard = [
+const mainKeyboardM = [
+    [
+        {
+            text:'Find a Mate 👬',
+            callback_data:  'findingMate'
+        }
+    ],
+    [
+        {
+            text:'Sympothy 👨‍❤️‍👨',
+            callback_data:  'sympothy'
+        }
+    ],
+    [
+        {
+                text:'My Profile 👤',
+                callback_data: 'profile'
+        },
+        {
+            text:'Tariff plans ✅',
+            callback_data: 'tariffPlans'
+        }
+    ],
+    [
+        {
+            text:'Settings ⚙️',
+            callback_data: 'settings'
+        },
+        {
+            text: 'Info ℹ️',
+            callback_data: 'info'
+        }
+    ],
+];
+
+const mainKeyboardF = [
+    [
+        {
+            text:'Find a Mate 👭',
+            callback_data:  'findingMate'
+        }
+    ],
+    [
+        {
+            text:'Sympothy 👩‍❤️‍👩',
+            callback_data:  'sympothy'
+        }
+    ],
+    [
+        {
+                text:'My Profile 👤',
+                callback_data: 'profile'
+        },
+        {
+            text:'Tariff plans ✅',
+            callback_data: 'tariffPlans'
+        }
+    ],
+    [
+        {
+            text:'Settings ⚙️',
+            callback_data: 'settings'
+        },
+        {
+            text: 'Info ℹ️',
+            callback_data: 'info'
+        }
+    ],
+];
+
+const mainKeyboardB = [
+    [
+        {
+            text:'Find a Mate 👥',
+            callback_data:  'findingMate'
+        }
+    ],
+    [
+        {
+            text:'Sympothy 💑',
+            callback_data:  'sympothy'
+        }
+    ],
+    [
+        {
+                text:'My Profile 👤',
+                callback_data: 'profile'
+        },
+        {
+            text:'Tariff plans ✅',
+            callback_data: 'tariffPlans'
+        }
+    ],
+    [
+        {
+            text:'Settings ⚙️',
+            callback_data: 'settings'
+        },
+        {
+            text: 'Info ℹ️',
+            callback_data: 'info'
+        }
+    ],
+];
+
+const sympothyKeyboard = [
     [
         {
             text:'Back ↩️',
@@ -173,7 +363,15 @@ const creatorsListKeyboard = [
         }
     ],
 ];
-const activeSubscriptionsKeyboard = [
+const findingMateKeyboard = [
+    [
+        {
+            text:'Back ↩️',
+            callback_data: 'back'
+        }
+    ],
+];
+const tariffPlansKeyboard = [
     [
         {
             text:'Back ↩️',
@@ -184,7 +382,7 @@ const activeSubscriptionsKeyboard = [
 const profileKeyboard = [
     [
         {
-            text:'Edit ✏️',
+            text:'Edit Profile ✏️',
             callback_data: 'edit'
         },
     ],
@@ -202,6 +400,22 @@ const profileKeyboard = [
     ],
 ];
 const editKeyboard = [
+    [
+        {
+            text:'Add profile picture ✏️',
+            callback_data: 'location'
+        },
+        {
+            text:'Change your location ✏️',
+            callback_data: 'location'
+        },
+    ],
+    [
+        {
+            text:'Change your interest ',
+            callback_data: 'interestedInChange'
+        },
+    ],
     [
         {
             text:'Share my Email',
@@ -288,37 +502,109 @@ const infoKeyboard = [
 
 
 
-bot.on('message', message => {
+bot.on('message', async (message) => {
     const tg_id = message.chat.id;
     const tg_userName = message.chat.username;
     const first_name = message.chat.first_name;
     const last_name = message.chat.last_name;
 
-    const startTextSplited = message.text.split(" ");
-    const startWord = startTextSplited[0];
 
-    const startText = message.text;
 
-    if(startWord == "/start"){
-        return;
-    }
-    else if (startWord == "/echo" && startTextSplited[1]){
-        return;
-    }
+
+    // else if (startWord == "/echo" && startTextSplited[1]){
+    //     return;
+    // }
+    if (message.photo) {
+        // Upload image to imgur
+        console.log("1");
+        const fileId = message.photo[message.photo.length - 1].file_id;
+        console.log("2");
+        const image = await imgur.uploadUrl(await bot.getFileLink(fileId));
+        console.log("3");
+        console.log(fileId);
+        console.log(image);
+
+
+        // if (message.caption) {
+        //     console.log(`${message.caption} ${image.data.link}`);
+        //     console.log("4");
+        // } else {
+        //     console.log(image.data.link);
+        //     //send(image.data.link);
+        // }
+      }
     else{
+        // let latitude1 = message.location.latitude;
+        // let longitude1 = message.location.longitude;
+        // console.log(latitude1);
+        // console.log(longitude1);
+        const startTextSplited = message.text.split(" ");
+        startWord = startTextSplited[0];
+
+        const startText = message.text;
+
+        if(startWord == "/start"){
+            return;
+        }
+
+        const objTg_id = Object.assign({"tg_id": tg_id});
+
         userMessage_id = message.message_id;
         console.log("user message_id: " + userMessage_id);
         bot.deleteMessage(tg_id, userMessage_id);
         userMessage_id = null;
 
-        //deletes bots message if you send him new /start request
-        if(botMessage_id != null){
-            console.log("bot message_id: " + userMessage_id);
-            bot.deleteMessage(tg_id, botMessage_id);
-            botMessage_id = null;
-        }
+        // deletes bots message if you send him new /start request
+        msgToDelete.findOne({where: objTg_id}).then(req =>{
+            if(!!req)
+            {
+                if(req.botMsg_id != null){
+                    console.log(req.botMsg_id);
+                    bot.deleteMessage(tg_id, req.botMsg_id);
+        
+                    // msgToDelete.update( {
+                    //     "botMsg_id": null,
+                    // }, {where: objTg_id});
+                }
+            }
+        });
 
-        const objTg_id = Object.assign({"tg_id": tg_id});
+        // let res;
+
+        // sequelize.query(`SELECT \`botMsg_id\` FROM msgtodeletes WHERE tg_id = ${tg_id};`)
+        // .then((err, result) => {
+        //     res = result;
+        // });
+    
+        // console.log(res);
+
+
+        // sequelize.query(`SELECT \`botMsg_id\` FROM msgtodeletes WHERE tg_id = ${tg_id};`, function (err, result){
+        //     if(err){
+        //         throw err;
+        //     }
+        //     if(result.botMsg_id != null)
+        //     {
+        //         bot.deleteMessage(tg_id, result.botMsg_id);
+    
+        //         msgToDelete.update( {
+        //             "botMsg_id": null,
+        //         }, {where: objTg_id});
+        //     }
+    
+        //     console.log("From database botMsg " + fields.botMsg_id);
+        
+        // })
+
+        // console.log("bot message_id: " + userMessage_id);
+        // for(var i = botMessage_id; i >= 0; i--)
+        // {
+        //     Promise.all([
+        //         bot.deleteMessage(tg_id, i)
+        //     ]).then(result => {
+        //             i = 0;
+        //     });
+        // }
         User.findOne({where: objTg_id}).then(id => {
             if(!id)
             {
@@ -337,24 +623,139 @@ bot.on('message', message => {
                     })
                 ]).then(result => {
         
-                    botMessage_id = result[0].message_id;
-                    console.log(botMessage_id)
+                    // botMessage_id = result[0].message_id;
+                    console.log(result[0].message_id);
+
+                    msgToDelete.findOne({where: objTg_id}).then(id => {
+                        
+                        if(!id)
+                        {
+                            msgToDelete.create( {
+                                "tg_id": tg_id,
+                                "botMsg_id": result[0].message_id,
+                            });
+                        }
+                        else
+                        {
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        }
+                    });
+                    
                 });
             }
             else
             {
-                Promise.all([
-                    bot.sendMessage(tg_id,"Keyboard", {
-                        reply_markup: {
-                            inline_keyboard: mainKeyboard
-                        }
-                        
-                    })
-                ]).then(result => {
-            
-                    botMessage_id = result[0].message_id;
-                    console.log(botMessage_id)
-                });
+                if(id.gender == null)
+                {
+                    Promise.all([
+                        bot.sendMessage(tg_id,"Choose your gender: ", {
+                            reply_markup: {
+                                inline_keyboard: genderKeyboard
+                            }
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+    
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                }
+                else if(id.interestedIn == null)
+                {
+                    Promise.all([
+                        bot.sendMessage(tg_id,"Choose your interest: ", {
+                            reply_markup: {
+                                inline_keyboard: interestedInKeyboard
+                            }
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+    
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                }
+                else
+                {
+                    if((id.gender == "male" && id.interestedIn == "women") || (id.gender == "female" && id.interestedIn == "men"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboard
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((id.gender == "male" && id.interestedIn == "men"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardM
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((id.gender == "female" && id.interestedIn == "women"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardF
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((id.gender == "male" && id.interestedIn == "both men and women") || (id.gender == "female" && id.interestedIn == "both men and women"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardB
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                }
             }
         });
     }
@@ -372,37 +773,12 @@ bot.onText(/\/start/, (message) => {
 
     const startText = message.text;
 
-    console.log(tg_id);
 
-/*     console.log(startTextSplited);
-    console.log(startWord);  */
-    userMessage_id = message.message_id;
-    console.log("user message_id: " + userMessage_id);
-    bot.deleteMessage(tg_id, userMessage_id);
-    userMessage_id = null;
+    // userMessage_id = message.message_id;
+    // console.log("user message_id: " + userMessage_id);
+    // bot.deleteMessage(tg_id, userMessage_id);
+    // userMessage_id = null;
 
-    if(botMessage_id != null){
-        console.log("bot message_id: " + userMessage_id);
-        bot.deleteMessage(tg_id, botMessage_id);
-        botMessage_id = null;
-    }
-    
-/*     if(userMessage_id == null){
-        userMessage_id = message.message_id;
-        console.log("user message_id: " + userMessage_id);
-        bot.deleteMessage(tg_id, userMessage_id);
-    }
-    else{
-        console.log("user message_id: " + userMessage_id);
-        bot.deleteMessage(tg_id, userMessage_id);
-        userMessage_id = message.message_id;
-    } */
-
-    //deletes bots message if you send him new /start request
-
-    /* userMessage_id = message.message_id;  */
-
-/*         console.log(message); */
 
     //Important
     const sentCode = message.text.replace('/start ', '');
@@ -422,7 +798,11 @@ bot.onText(/\/start/, (message) => {
     User.findOne({where: objTg_id}).then(id => {
         if(!id)
         {
-            User.findOne({where: objVerif_code}).then(code => {
+            // if(id.verif_code == sentCode)
+            // {
+                
+            // }
+            User.findOne({where: objVerif_code}).then(async code => {
 
                 console.log(code);
 
@@ -432,31 +812,481 @@ bot.onText(/\/start/, (message) => {
 
                     const domain = "localhost";
 
+                    bot.getUserProfilePhotos(tg_id).then(async photos => {
+
+                        // console.log(photos.photos[0][2]);
+                        // console.log(photos.photos.length);
+                        
+                        ProfilePhotos.create({
+                            "tg_id": tg_id,
+                        });
+
+                        console.log(photos.photos);
+                        console.log(photos.photos.length);
+
+
+                        let count = 0;
+
+                        for(let j = 0; j <= photos.photos.length - 1; j++)
+                        {
+
+
+
+
+                            // $.ajax('https://api.moderatecontent.com/moderate/?face=true&', {
+                            //     method: "GET",
+                            //     dataType: 'json',
+                            //     data: {
+                            //         key: '19b91ce536a2d1b657c58ac94a7500b8',
+                            //         url: `${image.link}`,
+
+                            //     },
+                            //     success: function (response) {
+                            //         console.log(response);
+                            //     }
+                            // });
+                            
+
+                            // axios.get('https://api.sightengine.com/1.0/check.json', {
+                            // params: {
+                            //     'url': `${image.link}`,
+                            //     'models': 'nudity,wad,properties,celebrities,offensive,faces,scam,text-content,face-attributes,gore,text',
+                            //     'api_user': '371817893',
+                            //     'api_secret': 'W4c8yBQdpnybhQa4JJUw',
+                            // }
+                            // })
+                            // .then(function (response) {
+                            // // on success: handle response
+                            // console.log(response.data);
+
+                            // console.log("Nudity safe: " + response.data.nudity.safe);
+                            // console.log("Weapon: " + response.data.weapon);
+                            // console.log("Alcohol: " + response.data.alcohol);
+                            // console.log("Drugs: " + response.data.drugs);
+                            // console.log("Sharpness: " + response.data.sharpness);
+                            // console.log("Brightness: " + response.data.brightness);
+                            // console.log("Faces: " + response.data.faces.length);
+                            // for(let i = 1; i <= response.data.faces.length; i++)
+                            // {
+                            //     console.log("Celebrity: " + JSON.stringify(response.data.faces[i])+ "\n")
+                            // }
+                            // console.log("Ofensive: " + response.data.offensive.prob);
+                            // console.log("Scam: " + response.data.scam.prob);
+                            // console.log("Gore: " + response.data.gore.prob);
+                            // // nudity: { raw: 0.01, safe: 0.98, partial: 0.01 },
+
+
+                            // })
+                            // .catch(function (error) {
+                            // // handle error
+                            // if (error.response) console.log(error.response.data);
+                            // else console.log(error.message);
+                            // });
+
+
+                            if(j == 0)
+                            {
+                                try{
+                                    const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[0][2].file_id));
+                                    console.log(image.link);
+                                    const savedImage = await image.link.split("/");
+    
+                                    ProfilePhotos.update({
+                                        "photo1": savedImage[3],
+                                    }, {where: objTg_id});
+                                }catch(err){
+                                    console.log("Couldn't load this image!");
+                                    count++;
+                                    try{
+                                        const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[1][2].file_id));
+                                        console.log(image.link);
+                                        const savedImage = await image.link.split("/");
+        
+                                        ProfilePhotos.update({
+                                            "photo1": savedImage[3],
+                                        }, {where: objTg_id});
+                                    }catch(err){
+                                        console.log("Couldn't load this image!");
+                                        count++;
+                                        try{
+                                            const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[2][2].file_id));
+                                            console.log(image.link);
+                                            const savedImage = await image.link.split("/");
+            
+                                            ProfilePhotos.update({
+                                                "photo1": savedImage[3],
+                                            }, {where: objTg_id});
+                                        }catch(err){
+                                            console.log("Couldn't load this image!");
+                                            count++;
+                                            try{
+                                                const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[3][2].file_id));
+                                                console.log(image.link);
+                                                const savedImage = await image.link.split("/");
+                
+                                                ProfilePhotos.update({
+                                                    "photo1": savedImage[3],
+                                                }, {where: objTg_id});
+                                                j = photos.photos.length;
+                                            }catch(err){
+                                                console.log("Couldn't load this image!");
+                                                j = photos.photos.length;
+                                            }
+                                        }
+                                    }
+                                }
+                            }   
+                            else if(j == 1)
+                            {
+                                if(count == 0)
+                                {
+                                    try{
+                                        const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[1][2].file_id));
+                                        console.log(image.link);
+                                        const savedImage = await image.link.split("/");
+
+                                        ProfilePhotos.update({
+                                            "photo2": savedImage[3],
+                                        }, {where: objTg_id});
+                                    }catch(err){
+                                        console.log("Couldn't load this image!");
+                                        count++;
+                                        try{
+                                            const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[2][2].file_id));
+                                            console.log(image.link);
+                                            const savedImage = await image.link.split("/");
+    
+                                            ProfilePhotos.update({
+                                                "photo2": savedImage[3],
+                                            }, {where: objTg_id});
+                                        }catch(err){
+                                            console.log("Couldn't load this image!");
+                                            count++;
+                                            try{
+                                                const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[3][2].file_id));
+                                                console.log(image.link);
+                                                const savedImage = await image.link.split("/");
+        
+                                                ProfilePhotos.update({
+                                                    "photo2": savedImage[3],
+                                                }, {where: objTg_id});
+                                                j = photos.photos.length;
+                                            }catch(err){
+                                                console.log("Couldn't load this image!");
+                                                j = photos.photos.length;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if(count == 1)
+                                {
+                                    try{
+                                        const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[2][2].file_id));
+                                        console.log(image.link);
+                                        const savedImage = await image.link.split("/");
+
+                                        ProfilePhotos.update({
+                                            "photo2": savedImage[3],
+                                        }, {where: objTg_id});
+                                    }catch(err){
+                                        console.log("Couldn't load this image!");
+                                        count++;
+                                        try{
+                                            const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[3][2].file_id));
+                                            console.log(image.link);
+                                            const savedImage = await image.link.split("/");
+    
+                                            ProfilePhotos.update({
+                                                "photo2": savedImage[3],
+                                            }, {where: objTg_id});
+                                            j = photos.photos.length;
+                                        }catch(err){
+                                            console.log("Couldn't load this image!");
+                                            j = photos.photos.length;
+                                        }
+                                    }
+                                }
+                                else if(count == 2)
+                                {
+                                    try{
+                                        const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[3][2].file_id));
+                                        console.log(image.link);
+                                        const savedImage = await image.link.split("/");
+
+                                        ProfilePhotos.update({
+                                            "photo2": savedImage[3],
+                                        }, {where: objTg_id});
+                                        j = photos.photos.length;
+                                    }catch(err){
+                                        console.log("Couldn't load this image!");
+                                        j = photos.photos.length;
+                                    }
+                                }
+                            }
+                            else if(j == 2)
+                            {
+                                if(count == 0)
+                                {
+                                    try{
+                                        const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[2][2].file_id));
+                                        console.log(image.link);
+                                        const savedImage = await image.link.split("/");
+
+                                        ProfilePhotos.update({
+                                            "photo3": savedImage[3],
+                                        }, {where: objTg_id});
+                                    }catch(err){
+                                        console.log("Couldn't load this image!");
+                                        count++;
+                                        try{
+                                            const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[3][2].file_id));
+                                            console.log(image.link);
+                                            const savedImage = await image.link.split("/");
+    
+                                            ProfilePhotos.update({
+                                                "photo3": savedImage[3],
+                                            }, {where: objTg_id});
+                                            j = photos.photos.length;
+                                        }catch(err){
+                                            console.log("Couldn't load this image!");
+                                            j = photos.photos.length;
+                                        }
+                                    }
+                                }
+                                else if(count == 1)
+                                {
+                                    try{
+                                        const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[3][2].file_id));
+                                        console.log(image.link);
+                                        const savedImage = await image.link.split("/");
+
+                                        ProfilePhotos.update({
+                                            "photo3": savedImage[3],
+                                        }, {where: objTg_id});
+                                        j = photos.photos.length;
+                                    }catch(err){
+                                        console.log("Couldn't load this image!");
+                                        j = photos.photos.length;
+                                    }
+                                }
+                               
+                            }
+                            else if(j == 3)
+                            {
+                                try{
+                                    const image = await imgur.uploadUrl(await bot.getFileLink(photos.photos[3][2].file_id));
+                                    console.log(image.link);
+                                    const savedImage = await image.link.split("/");
+
+                                    ProfilePhotos.update({
+                                        "photo4": savedImage[3],
+                                    }, {where: objTg_id});
+                                }catch(err){
+                                    console.log("Couldn't load this image!");
+                                }
+                                //to be sure that we are taking only 4 photos
+                                j = photos.photos.length;
+                            }
+
+                        }
+
+                    });
+
+                    Location.findOne({where: objVerif_code}).then(async verCode => {
+                        if(!!verCode)
+                        {
+                            Location.update( {
+                                "tg_id": tg_id,
+                                "verif_code": "",
+                            }, {where: objVerif_code});
+                        }
+                    });
+
                     User.update( {
                         "tg_id": tg_id,
                         "tg_userName": `@${tg_userName}`,
                         "first_name": first_name,
                         "last_name": last_name,
-                        "email": "toto@gmail.com",
                         "verif_code": "",
+                        "balance": "0",
                     }, {where: objVerif_code});
-                    Promise.all([
-                        bot.sendMessage(tg_id,"Keyboard", {
-                            reply_markup: {
-                                inline_keyboard: mainKeyboard
+
+                    
+                    await bot.sendMessage(tg_id,"Hi, I'm the Midnight bot! I'm here to let you spend the best \"Midnight\" in your world ☺️ ");
+                    
+                    if(code.gender == null)
+                    {
+                        await Promise.all([
+                            bot.sendMessage(tg_id,"Choose your gender: ", {
+                                reply_markup: {
+                                    inline_keyboard: genderKeyboard
+                                }
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+
+                            msgToDelete.findOne({where: objTg_id}).then(id => {
+                                if(!id)
+                                {
+                                    msgToDelete.create( {
+                                        "tg_id": tg_id,
+                                        "botMsg_id": result[0].message_id,
+                                    });
+                                }
+                                else
+                                {
+                                    msgToDelete.update( {
+                                        "botMsg_id": result[0].message_id,
+                                    }, {where: objTg_id});
+
+                                    userMessage_id = message.message_id;
+                                    console.log("user message_id: " + userMessage_id);
+                                    bot.deleteMessage(tg_id, userMessage_id);
+                                    userMessage_id = null;
+                                }
+                            });
+                        });
+                    }
+                    if(code.gender != null && code.interestedIn == null)
+                    {
+                        await Promise.all([
+                            bot.sendMessage(tg_id,"Choose your interest: ", {
+                                reply_markup: {
+                                    inline_keyboard: interestedInKeyboard
+                                }
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+
+                            msgToDelete.findOne({where: objTg_id}).then(id => {
+                                if(!id)
+                                {
+                                    msgToDelete.create( {
+                                        "tg_id": tg_id,
+                                        "botMsg_id": result[0].message_id,
+                                    });
+                                }
+                                else
+                                {
+                                    msgToDelete.update( {
+                                        "botMsg_id": result[0].message_id,
+                                    }, {where: objTg_id});
+
+                                    userMessage_id = message.message_id;
+                                    console.log("user message_id: " + userMessage_id);
+                                    bot.deleteMessage(tg_id, userMessage_id);
+                                    userMessage_id = null;
+                                }
+                            });
+                        });
+                    }
+                    if((code.gender == "male" && code.interestedIn == "female") || (code.gender == "female" && code.interestedIn == "male"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboard
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((code.gender == "male" && code.interestedIn == "male"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardM
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((code.gender == "female" && code.interestedIn == "female"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardF
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((code.gender == "male" && code.interestedIn == "both men and women") || (code.gender == "female" && code.interestedIn == "both men and women"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardB
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    
+
+                    msgToDelete.findOne({where: objTg_id}).then(req =>{
+                        if(!!req)
+                        {
+                            if(req.botMsg_id != null){
+                                console.log(req.botMsg_id);
+                                bot.deleteMessage(tg_id, req.botMsg_id);
+            
                             }
-                        })
-                    ]).then(result => {
-                        botMessage_id = result[0].message_id;
-                        console.log(botMessage_id)
+                        }
                     });
 
 
                 }
                 else
                 {
+                    msgToDelete.findOne({where: objTg_id}).then(req =>{
+                        if(!!req)
+                        {
+                            if(req.botMsg_id != null){
+                                console.log(req.botMsg_id);
+                                bot.deleteMessage(tg_id, req.botMsg_id);
+                    
+                                // msgToDelete.update( {
+                                //     "botMsg_id": null,
+                                // }, {where: objTg_id});
+                            }
+                        }
+                    });
+
                     Promise.all([
-                        bot.sendMessage(tg_id, "Go wisit our website ;)", {
+                        bot.sendMessage(tg_id, "Go visit our website ;)", {
                             reply_markup: {
                                 inline_keyboard: [
                                     [
@@ -470,123 +1300,777 @@ bot.onText(/\/start/, (message) => {
                         })
                     ]).then(result => {
             
-                        botMessage_id = result[0].message_id;
-                        console.log(botMessage_id)
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+
+                        msgToDelete.findOne({where: objTg_id}).then(id => {
+                            if(!id)
+                            {
+                                msgToDelete.create( {
+                                    "tg_id": tg_id,
+                                    "botMsg_id": result[0].message_id,
+                                });
+                            }
+                            else
+                            {
+                                msgToDelete.update( {
+                                    "botMsg_id": result[0].message_id,
+                                }, {where: objTg_id});
+
+                                userMessage_id = message.message_id;
+                                console.log("user message_id: " + userMessage_id);
+                                bot.deleteMessage(tg_id, userMessage_id);
+                                userMessage_id = null;
+                            }
+                        });
+
                     });
                 }
             });
         }
         else
         {
-            Promise.all([
-                bot.sendMessage(tg_id,"Keyboard", {
-                    reply_markup: {
-                        inline_keyboard: mainKeyboard
+
+            userMessage_id = message.message_id;
+            console.log("user message_id: " + userMessage_id);
+            bot.deleteMessage(tg_id, userMessage_id);
+            userMessage_id = null;
+
+            msgToDelete.findOne({where: objTg_id}).then(req =>{
+                if(!!req)
+                {
+                    if(req.botMsg_id != null){
+                        console.log(req.botMsg_id);
+                        bot.deleteMessage(tg_id, req.botMsg_id);
+    
+                        // msgToDelete.update( {
+                        //     "botMsg_id": null,
+                        // }, {where: objTg_id});
                     }
-                    
-                })
-            ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                }
             });
+            if(id.gender == null)
+            {
+                Promise.all([
+                    bot.sendMessage(tg_id,"Choose your gender: ", {
+                        reply_markup: {
+                            inline_keyboard: genderKeyboard
+                        }
+                    })
+                ]).then(result => {
+                    // botMessage_id = result[0].message_id;
+                    console.log(result[0].message_id)
+
+                    msgToDelete.findOne({where: objTg_id}).then(id => {
+                        if(!id)
+                        {
+                            msgToDelete.create( {
+                                "tg_id": tg_id,
+                                "botMsg_id": result[0].message_id,
+                            });
+                        }
+                        else
+                        {
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+
+                        }
+                    });
+                });
+            }
+            else if(id.interestedIn == null)
+            {
+                Promise.all([
+                    bot.sendMessage(tg_id,"Choose your interest: ", {
+                        reply_markup: {
+                            inline_keyboard: interestedInKeyboard
+                        }
+                    })
+                ]).then(result => {
+                    // botMessage_id = result[0].message_id;
+                    console.log(result[0].message_id)
+
+                    msgToDelete.findOne({where: objTg_id}).then(id => {
+                        if(!id)
+                        {
+                            msgToDelete.create( {
+                                "tg_id": tg_id,
+                                "botMsg_id": result[0].message_id,
+                            });
+                        }
+                        else
+                        {
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        }
+                    });
+                });
+            }
+            else if((id.gender == "male" && id.interestedIn == "women") || (id.gender == "female" && id.interestedIn == "men"))
+            {
+                Promise.all([
+                    bot.sendMessage(tg_id,"Keyboard", {
+                        reply_markup: {
+                            inline_keyboard: mainKeyboard
+                        }
+                        
+                    })
+                ]).then(result => {
+                    // botMessage_id = result[0].message_id;
+                    console.log(result[0].message_id)
+
+                    msgToDelete.update( {
+                        "botMsg_id": result[0].message_id,
+                    }, {where: objTg_id});
+                });
+            }
+            else if((id.gender == "male" && id.interestedIn == "men"))
+            {
+                Promise.all([
+                    bot.sendMessage(tg_id,"Keyboard", {
+                        reply_markup: {
+                            inline_keyboard: mainKeyboardM
+                        }
+                        
+                    })
+                ]).then(result => {
+                    // botMessage_id = result[0].message_id;
+                    console.log(result[0].message_id)
+
+                    msgToDelete.update( {
+                        "botMsg_id": result[0].message_id,
+                    }, {where: objTg_id});
+                });
+            }
+            else if((id.gender == "female" && id.interestedIn == "women"))
+            {
+                Promise.all([
+                    bot.sendMessage(tg_id,"Keyboard", {
+                        reply_markup: {
+                            inline_keyboard: mainKeyboardF
+                        }
+                        
+                    })
+                ]).then(result => {
+                    // botMessage_id = result[0].message_id;
+                    console.log(result[0].message_id)
+
+                    msgToDelete.update( {
+                        "botMsg_id": result[0].message_id,
+                    }, {where: objTg_id});
+                });
+            }
+            else if((id.gender == "male" && id.interestedIn == "both men and women") || (id.gender == "female" && id.interestedIn == "both men and women"))
+            {
+                Promise.all([
+                    bot.sendMessage(tg_id,"Keyboard", {
+                        reply_markup: {
+                            inline_keyboard: mainKeyboardB
+                        }
+                        
+                    })
+                ]).then(result => {
+                    // botMessage_id = result[0].message_id;
+                    console.log(result[0].message_id)
+
+                    msgToDelete.update( {
+                        "botMsg_id": result[0].message_id,
+                    }, {where: objTg_id});
+                });
+            }
         }
     });
 });
 
-bot.onText(/\/echo (.+)/, (message, match) => {
+// bot.onText(/\/echo (.+)/, (message, match) => {
 
-    const tg_id = message.chat.id;
-    //take a code only if first part is /start
-    userMessage_id = message.message_id;
-    console.log("user message_id: " + message);
-    bot.deleteMessage(tg_id, userMessage_id);
-    userMessage_id = null;
+//     const tg_id = message.chat.id;
+//     //take a code only if first part is /start
+//     userMessage_id = message.message_id;
+//     console.log("user message_id: " + message);
+//     bot.deleteMessage(tg_id, userMessage_id);
+//     userMessage_id = null;
 
-    if(botMessage_id != null)
-    {
-    console.log("bot message_id: " + userMessage_id);
-    bot.deleteMessage(tg_id, botMessage_id);
-    botMessage_id = null;
-    }
-    const startTextSplited = message.text.split(" ");
-    const startWord = startTextSplited[0];
+//     if(botMessage_id != null)
+//     {
+//     console.log("bot message_id: " + userMessage_id);
+//     bot.deleteMessage(tg_id, botMessage_id);
+//     botMessage_id = null;
+//     }
+//     const startTextSplited = message.text.split(" ");
+//     const startWord = startTextSplited[0];
 
-    const startText = message.text;
+//     const startText = message.text;
 
-    console.log(startTextSplited);
-    console.log(startWord);
+//     console.log(startTextSplited);
+//     console.log(startWord);
 
-    //Important
-    const echo = message.text.replace('/echo ', '');
+//     //Important
+//     const echo = message.text.replace('/echo ', '');
 
-    userMessage_id = message.message_id;
+//     userMessage_id = message.message_id;
 
-	const chatId = message.chat.id
+// 	const chatId = message.chat.id
 
 	
-    Promise.all([
-        bot.sendMessage(chatId, echo)
-    ]).then(result => {
+//     Promise.all([
+//         bot.sendMessage(chatId, echo)
+//     ]).then(result => {
 
-        botMessage_id = result[0].message_id;
-        console.log(botMessage_id)
-    });
-})
+//         botMessage_id = result[0].message_id;
+//         console.log(botMessage_id)
+//     });
+// })
 
-bot.on('callback_query', query => {
+bot.on('callback_query', async query => {
 
     const tg_id = query.message.chat.id;
 
-    if(botMessage_id != null)
-    {
-        console.log("bot message_id: " + userMessage_id);
-        bot.deleteMessage(tg_id, botMessage_id);
-    }
+    const objTg_id = Object.assign({"tg_id": tg_id});
+
+    msgToDelete.findOne({where: objTg_id}).then(async req =>{
+        if(!!req)
+        {
+            if(query.data == 'back')
+            {
+                if(req.botMsg2_id != null){
+                    console.log(req.botMsg2_id);
+                    await bot.deleteMessage(tg_id, req.botMsg2_id);
+
+                    msgToDelete.update( {
+                        "botMsg2_id": null,
+                    }, {where: objTg_id});
+                }
+                if(req.botMsg3_id != null){
+                    console.log(req.botMsg3_id);
+                    await bot.deleteMessage(tg_id, req.botMsg3_id);
+
+                    msgToDelete.update( {
+                        "botMsg3_id": null,
+                    }, {where: objTg_id});
+                }
+                if(req.botMsg4_id != null){
+                    console.log(req.botMsg4_id);
+                    await bot.deleteMessage(tg_id, req.botMsg4_id);
+
+                    msgToDelete.update( {
+                        "botMsg4_id": null,
+                    }, {where: objTg_id});   
+                }
+                if(req.botMsg5_id != null){
+                    console.log(req.botMsg5_id);
+                    await bot.deleteMessage(tg_id, req.botMsg5_id);
+
+                    msgToDelete.update( {
+                        "botMsg5_id": null,
+                    }, {where: objTg_id});   
+                }
+            }
+            if(req.botMsg_id != null){
+                console.log(req.botMsg_id);
+                await bot.deleteMessage(tg_id, req.botMsg_id);
+            }
+        }
+    }).then(async afterDel =>{
+
+
+//    let res;
+
+//     sequelize.query(`SELECT \`botMsg_id\` FROM msgtodeletes WHERE tg_id = ${tg_id};`)
+//     .then((err, result) => {
+//         res = result;
+//     });
+
+//     console.log(res);
+
+    // sequelize.query(`SELECT \`botMsg_id\` FROM msgtodeletes WHERE tg_id = ${tg_id};`, function (err, result){
+    //     if(err){
+    //         throw err;
+    //     }
+
+    //     console.log(result);
+
+    //     if(result != null)
+    //     {
+    //         bot.deleteMessage(tg_id, result);
+
+    //         msgToDelete.update( {
+    //             "botMsg_id": null,
+    //         }, {where: objTg_id});
+    //     }
+
+    //     console.log("From database botMsg " + fields.botMsg_id);
+    
+    // })
 
     switch(query.data)
     {
-        case 'creatorsList':
+        case 'maleGender':
+
+            await User.update( {
+                "gender": "male",
+            }, {where: objTg_id});
+
+            Promise.all([
+                bot.sendMessage(tg_id,"Choose your interest: ", {
+                    reply_markup: {
+                        inline_keyboard: interestedInKeyboard
+                    }
+                })
+            ]).then(result => {
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
+            });
+
+        break
+        case 'femaleGender':
+
+            await User.update( {
+                "gender": "female",
+            }, {where: objTg_id});
+
+            Promise.all([
+                bot.sendMessage(tg_id,"Choose your interest: ", {
+                    reply_markup: {
+                        inline_keyboard: interestedInKeyboard
+                    }
+                })
+            ]).then(result => {
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
+            });
+            
+        break
+        case 'maleOrientated':
+            
+            await User.update( {
+                "interestedIn": "men",
+            }, {where: objTg_id});
+
+            User.findOne({where: objTg_id}).then(id => {
+                if(id.gender == "male")
+                {
+                    Promise.all([
+                        bot.sendMessage(tg_id,"Keyboard", {
+                            reply_markup: {
+                                inline_keyboard: mainKeyboardM
+                            }
+                            
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                }
+                else if(id.gender == "female")
+                {
+                    Promise.all([
+                        bot.sendMessage(tg_id,"Keyboard", {
+                            reply_markup: {
+                                inline_keyboard: mainKeyboard
+                            }
+                            
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                }
+            });
+            
+            break;
+        case 'femaleOrientated':
+
+            await User.update( {
+                "interestedIn": "women",
+            }, {where: objTg_id});
+
+            User.findOne({where: objTg_id}).then(id => {
+                if(id.gender == "male")
+                {
+                    Promise.all([
+                        bot.sendMessage(tg_id,"Keyboard", {
+                            reply_markup: {
+                                inline_keyboard: mainKeyboard
+                            }
+
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                }
+                else if(id.gender == "female")
+                {
+                    Promise.all([
+                        bot.sendMessage(tg_id,"Keyboard", {
+                            reply_markup: {
+                                inline_keyboard: mainKeyboardF
+                            }
+                            
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                }
+            });
+
+            break;
+        case 'bothOrientated':
+
+            await User.update( {
+                "interestedIn": "both men and women",
+            }, {where: objTg_id});
+
             Promise.all([
                 bot.sendMessage(tg_id,"Keyboard", {
                     reply_markup: {
-                        inline_keyboard: creatorsListKeyboard
+                        inline_keyboard: mainKeyboardB
                     }
                     
                 })
             ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
+            });
+
+            break;
+        case 'findingMate':
+
+
+
+            // User.findOne({where: objTg_id}).then(id => {
+            
+            // bot.sendPhoto(tg_id, ("https://i.imgur.com/" + id.photo1), caption  = "", {
+            //         reply_markup: {
+            //             inline_keyboard: findingMateKeyboard
+            //         }
+            //     })
+
+            // });
+            // const displayedObjTg_id = Object.assign({"id": 1, "tg_id": 2});
+            // User.findOne({where: displayedObjTg_id }).then(id => {
+            //     const displayedObjTg_id = Object.assign({"tg_id": element.tg_id});
+            //     await ProfilePhotos.findOne({where: displayedObjTg_id, objTg_id}).then(async req =>{
+            //         let photos = []
+            //         let resultMap = null;
+            //         if(!!req.photo1){
+            //             //photo #1
+            //             photos.push("https://i.imgur.com/" + req.photo1);
+            //         }
+            //         if(!!req.photo2){
+            //                 //photo #2
+            //                 photos.push("https://i.imgur.com/" + req.photo2);
+            //         }
+            //         if(!!req.photo3){
+            //                 //photo #3
+            //                 photos.push("https://i.imgur.com/" + req.photo3);
+            //         }
+            //         if(!!req.photo4){
+            //                 //photo #4
+            //                 photos.push("https://i.imgur.com/" + req.photo4);
+            //         }
+            //         if(photos != [])
+            //         {
+            //             resultMap = photos.map(photo => {
+            //                 return{
+            //                     type: 'photo',
+            //                     media: photo,
+            //                 }
+            //             });
+            //             console.log(resultMap);
+            //         }
+    
+    
+    
+            //         if(resultMap != null)
+            //         {
+            //             await bot.sendMediaGroup(tg_id, resultMap).then(result => {
+            //                 // botMessage_id = result[0].message_id;
+            //                 if(!result)
+            //                 {
+            //                     return false;
+            //                 }
+            //                 if(!!req.photo4){
+            //                 //photo 4
+            //                 msgToDelete.update( {
+            //                     "botMsg2_id": result[0].message_id,
+            //                     "botMsg3_id": result[1].message_id,
+            //                     "botMsg4_id": result[2].message_id,
+            //                     "botMsg5_id": result[3].message_id,
+            //                 }, {where: objTg_id});
+            //                 }
+            //                 else if(!!req.photo3){
+            //                         //photo 3
+            //                         msgToDelete.update( {
+            //                             "botMsg2_id": result[0].message_id,
+            //                             "botMsg3_id": result[1].message_id,
+            //                             "botMsg4_id": result[2].message_id,
+            //                         }, {where: objTg_id});
+            //                 }
+            //                 else if(!!req.photo2){
+            //                         //photo 2
+            //                         msgToDelete.update( {
+            //                             "botMsg2_id": result[0].message_id,
+            //                             "botMsg3_id": result[1].message_id,
+            //                         }, {where: objTg_id});
+            //                 }
+            //                 else if(!!req.photo1){
+            //                         //photo 1
+            //                         msgToDelete.update( {
+            //                             "botMsg2_id": result[0].message_id,
+            //                         }, {where: objTg_id});
+            //                 }
+            //                 else{
+            //                     console.log("none");
+            //                 }
+            //             });
+            //         }
+                    // User.findOne({where: objTg_id}).then(id => {
+    
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: findingMateKeyboard
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+            
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    // });
+            //     });
+            // });
+
+        break
+        case 'sympothy':
+            Promise.all([
+                bot.sendMessage(tg_id,"Keyboard", {
+                    reply_markup: {
+                        inline_keyboard: sympothyKeyboard
+                    }
+                    
+                })
+            ]).then(result => {
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
             });
         break
-        case 'activeSubscriptions':
+        case 'tariffPlans':
             Promise.all([
                 bot.sendMessage(tg_id,"Keyboard", {
                     reply_markup: {
-                        inline_keyboard: activeSubscriptionsKeyboard
+                        inline_keyboard: tariffPlansKeyboard
                     }
                     
                 })
             ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
             });
         break
         case 'profile':
-            Promise.all([
-                bot.sendMessage(tg_id,"Keyboard", {
-                    reply_markup: {
-                        inline_keyboard: profileKeyboard
-                    }
+            User.findOne({where: objTg_id}).then(async id => {
+                await ProfilePhotos.findOne({where: objTg_id}).then(async req =>{
                     
-                })
-            ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                    // try{
+                        if(!(req.photo1) && !(req.photo2) && !(req.photo3) && !(req.photo4)){
+                                    
+                            bot.sendPhoto(tg_id, ("https://i.imgur.com/z4oM4NE.jpeg"), 
+                            { 
+                                caption: `${id.first_name} \nYou are interested in ${id.interestedIn}`,
+                                
+                                reply_markup: {
+                                    inline_keyboard: profileKeyboard
+                                }
+                            }).then(result => {
+                                console.log(result.message_id)
+
+                                msgToDelete.update( {
+                                    "botMsg_id": result.message_id,
+                                }, {where: objTg_id});
+                            })
+                        }
+                        else if(!!(req.photo1) && !(req.photo2) && !(req.photo3) && !(req.photo4)){
+                                    
+                            bot.sendPhoto(tg_id, ("https://i.imgur.com/" + req.photo1), 
+                            { 
+                                caption: `${id.first_name} \nYou are interested in ${id.interestedIn}`,
+                                
+                                reply_markup: {
+                                    inline_keyboard: profileKeyboard
+                                }
+                            }).then(result => {
+                                console.log(result.message_id)
+
+                                msgToDelete.update( {
+                                    "botMsg_id": result.message_id,
+                                }, {where: objTg_id});
+                            })
+                        }
+                        else
+                        {
+                            let photos = []
+                            let resultMap = null;
+                            if(!!(req.photo1)){
+                                //photo #1
+                                photos.push("https://i.imgur.com/" + req.photo1);
+                            }
+                            if(!!(req.photo2)){
+                                    //photo #2
+                                    photos.push("https://i.imgur.com/" + req.photo2);
+                            }
+                            if(!!req.photo3){
+                                    //photo #3
+                                    photos.push("https://i.imgur.com/" + req.photo3);
+                            }
+                            if(!!(req.photo4)){
+                                    //photo #4
+                                    photos.push("https://i.imgur.com/" + req.photo4);
+                            }
+                            if(photos != [])
+                            {
+                                resultMap = photos.map(photo => {
+                                    return{
+                                        type: 'photo',
+                                        media: photo,
+                                    }
+                                });
+                                console.log(resultMap);
+                            }
+
+
+
+                            if(resultMap != null)
+                            {
+                                try{
+                                        await bot.sendMediaGroup(tg_id, resultMap).then(result => {
+                                            // botMessage_id = result[0].message_id;
+                                            // console.log(result[0].message_id);
+                    
+                                            if(!!req.photo4){
+                                                    //photo 4
+                                                    msgToDelete.update( {
+                                                        "botMsg2_id": result[0].message_id,
+                                                        "botMsg3_id": result[1].message_id,
+                                                        "botMsg4_id": result[2].message_id,
+                                                        "botMsg5_id": result[3].message_id,
+                                                    }, {where: objTg_id});
+                                            }
+                                            else if(!!req.photo3){
+                                                    //photo 3
+                                                    msgToDelete.update( {
+                                                        "botMsg2_id": result[0].message_id,
+                                                        "botMsg3_id": result[1].message_id,
+                                                        "botMsg4_id": result[2].message_id,
+                                                    }, {where: objTg_id});
+                                            }
+                                            else if(!!req.photo2){
+                                                    //photo 2
+                                                    msgToDelete.update( {
+                                                        "botMsg2_id": result[0].message_id,
+                                                        "botMsg3_id": result[1].message_id,
+                                                    }, {where: objTg_id});
+                                            }
+                                            else if(!!req.photo1){
+                                                    //photo 1
+                                                    msgToDelete.update( {
+                                                        "botMsg2_id": result[0].message_id,
+                                                    }, {where: objTg_id});
+                                            }
+                                            else{
+                                                console.log("none");
+                                            }
+
+                                            Promise.all([
+                                                bot.sendMessage(tg_id,`${id.first_name} \nYou are interested in ${id.interestedIn}`, {
+                                                    reply_markup: {
+                                                        inline_keyboard: profileKeyboard
+                                                    }
+                                                    
+                                                })
+                                            ]).then(result => {
+                                                // botMessage_id = result[0].message_id;
+                                                console.log(result[0].message_id)
+                            
+                                                msgToDelete.update( {
+                                                    "botMsg_id": result[0].message_id,
+                                                }, {where: objTg_id});
+                                            });
+                                        });
+                                }catch(err)
+                                {
+                                    console.log("Error!!")
+                                    bot.sendPhoto(tg_id, ("https://i.imgur.com/z4oM4NE.jpeg"), 
+                                    { 
+                                        caption: `${id.first_name} \nYou are interested in ${id.interestedIn}`,
+                                        
+                                        reply_markup: {
+                                            inline_keyboard: profileKeyboard
+                                        }
+                                    }).then(result => {
+                                        console.log(result.message_id)
+
+                                        msgToDelete.update( {
+                                            "botMsg_id": result.message_id,
+                                        }, {where: objTg_id});
+                                    })
+                                }
+                            }
+                        }
+                    // }
+                    // catch(err)
+                    // {
+                    //     console.log("Something went wrong!!!!")
+                    // }
+                });  
+                
             });
+
         break
         case 'edit':
             Promise.all([
@@ -597,10 +2081,115 @@ bot.on('callback_query', query => {
                     
                 })
             ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
             });
+        break
+        case 'interestedInChange':
+            User.findOne({where: objTg_id}).then(id => {
+            Promise.all([
+                bot.sendMessage(tg_id,`${id.first_name} \nYou were interested in ${id.interestedIn} \n\nChoose your interest:`, {
+                    reply_markup: {
+                        inline_keyboard: interestedInChangeKeyboard
+                    }
+                })
+            ]).then(result => {
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
+            });
+        });
+
+        break
+        case 'changeToMaleOrientated':
+
+            await User.update( {
+                "interestedIn": "men",
+            }, {where: objTg_id}).then(updated => {
+
+                User.findOne({where: objTg_id}).then(id => {
+
+                    Promise.all([
+                        bot.sendMessage(tg_id,`${id.first_name} \nYou are interested in ${id.interestedIn}`, {
+                            reply_markup: {
+                                inline_keyboard: profileKeyboard
+                            }
+                            
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+    
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                });
+
+            });
+        break
+        case 'changeToFemaleOrientated':
+
+            await User.update( {
+                "interestedIn": "women",
+            }, {where: objTg_id}).then(updated => {
+
+                User.findOne({where: objTg_id}).then(id => {
+
+                    Promise.all([
+                        bot.sendMessage(tg_id,`${id.first_name} \nYou are interested in ${id.interestedIn}`, {
+                            reply_markup: {
+                                inline_keyboard: profileKeyboard
+                            }
+                            
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+    
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                });
+
+            });
+        break
+        case 'changeToBothOrientated':
+
+            await User.update( {
+                "interestedIn": "both men and women",
+            }, {where: objTg_id}).then(updated => {
+
+                User.findOne({where: objTg_id}).then(id => {
+
+                    Promise.all([
+                        bot.sendMessage(tg_id,`${id.first_name} \nYou are interested in ${id.interestedIn}`, {
+                            reply_markup: {
+                                inline_keyboard: profileKeyboard
+                            }
+                            
+                        })
+                    ]).then(result => {
+                        // botMessage_id = result[0].message_id;
+                        console.log(result[0].message_id)
+    
+                        msgToDelete.update( {
+                            "botMsg_id": result[0].message_id,
+                        }, {where: objTg_id});
+                    });
+                });
+
+            });
+
+            
         break
         case 'balance':
             Promise.all([
@@ -611,9 +2200,12 @@ bot.on('callback_query', query => {
                     
                 })
             ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
             });
         break
         case 'settings':
@@ -625,9 +2217,12 @@ bot.on('callback_query', query => {
                     
                 })
             ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
             });
         break
         case 'language':
@@ -639,9 +2234,12 @@ bot.on('callback_query', query => {
                     
                 })
             ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
             });
         break
 
@@ -654,23 +2252,88 @@ bot.on('callback_query', query => {
                     
                 })
             ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
             });
             break
         case 'back':
-            Promise.all([
-                bot.sendMessage(tg_id,"Keyboard", {
-                    reply_markup: {
-                        inline_keyboard: mainKeyboard
-                    }
-                    
-                })
-            ]).then(result => {
+            User.findOne({where: objTg_id}).then(id => {
+                if((id.gender == "male" && id.interestedIn == "women") || (id.gender == "female" && id.interestedIn == "men"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboard
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
         
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((id.gender == "male" && id.interestedIn == "men"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardM
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((id.gender == "female" && id.interestedIn == "women"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardF
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
+                    else if((id.gender == "male" && id.interestedIn == "both men and women") || (id.gender == "female" && id.interestedIn == "both men and women"))
+                    {
+                        Promise.all([
+                            bot.sendMessage(tg_id,"Keyboard", {
+                                reply_markup: {
+                                    inline_keyboard: mainKeyboardB
+                                }
+                                
+                            })
+                        ]).then(result => {
+                            // botMessage_id = result[0].message_id;
+                            console.log(result[0].message_id)
+        
+                            msgToDelete.update( {
+                                "botMsg_id": result[0].message_id,
+                            }, {where: objTg_id});
+                        });
+                    }
             });
         break
         case 'backToSettings':
@@ -682,26 +2345,36 @@ bot.on('callback_query', query => {
                     
                 })
             ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+                // botMessage_id = result[0].message_id;
+                console.log(result[0].message_id)
+
+                msgToDelete.update( {
+                    "botMsg_id": result[0].message_id,
+                }, {where: objTg_id});
             });
         break
         case 'backToProfile':
-            Promise.all([
-                bot.sendMessage(tg_id,"Keyboard", {
-                    reply_markup: {
-                        inline_keyboard: profileKeyboard
-                    }
-                    
-                })
-            ]).then(result => {
-        
-                botMessage_id = result[0].message_id;
-                console.log(botMessage_id)
+            User.findOne({where: objTg_id}).then(id => {
+
+                Promise.all([
+                    bot.sendMessage(tg_id,`${id.first_name} \nYou are interested in ${id.interestedIn}`, {
+                        reply_markup: {
+                            inline_keyboard: profileKeyboard
+                        }
+                        
+                    })
+                ]).then(result => {
+                    // botMessage_id = result[0].message_id;
+                    console.log(result[0].message_id)
+
+                    msgToDelete.update( {
+                        "botMsg_id": result[0].message_id,
+                    }, {where: objTg_id});
+                });
             });
         break
     }
+    });
     bot.answerCallbackQuery({
         callback_query_id: query.id
     })
